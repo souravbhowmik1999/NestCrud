@@ -4,6 +4,8 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
+
+    //Authentication Using Passport
     constructor(private userService: UserService, private jwtService: JwtService) {}
     
     async validateUser(email: string, pass: string): Promise<any> {
@@ -25,12 +27,14 @@ export class AuthService {
         }
     }
 
+    //Authentication Using JWT token
     async login(email: string, pass:string) {
         const userData =  await this.userService.findUserByEmail(email);
         if(userData){
             if(pass && email){
                 if(pass === userData.password){
-                    return {access_token: this.jwtService.sign({ username: email, password: pass })};
+                    const payload = { username: email, password: pass };
+                    return {access_token: this.jwtService.sign(payload)};
                 }else{
                     return 'Wrong Password';
                 }
