@@ -16,7 +16,7 @@ import { JwtStrategy } from './jwt.strategy';
     JwtModule.register({
       //get data from constant.js file
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      // signOptions: { expiresIn: '60s' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy]

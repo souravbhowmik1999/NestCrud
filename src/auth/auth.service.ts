@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { UserService } from "../user/user.service";
 import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from "./dto/login.dto";
 
 @Injectable()
 export class AuthService {
@@ -16,34 +17,41 @@ export class AuthService {
                 if(user.password === pass){
                     return user;
                 }else{
-                    return 'Wrong Password';
+                    throw new BadRequestException('Wrong Password');
                 }
             }else{
-                return 'Username and Password required';
+                throw new BadRequestException('Username and Password required');
             }
 
         }else{
-            return 'User is not register';
+            throw new NotFoundException('User is not registered');
         }
     }
 
     //Authentication Using JWT token
-    async login(email: string, pass:string) {
+    async login(loginDto: LoginDto) {
+        const email = loginDto.email;
+        const pass = loginDto.password;
         const userData =  await this.userService.findUserByEmail(email);
         if(userData){
             if(pass && email){
                 if(pass === userData.password){
                     const payload = { username: email, password: pass };
-                    return {access_token: this.jwtService.sign(payload)};
+                    const token = this.jwtService.sign(payload)
+                    return {
+                        token : token,
+                        success: 'Authentication successful',
+                        statusCode: HttpStatus.OK
+                    };
                 }else{
-                    return 'Wrong Password';
+                    throw new BadRequestException('Wrong Password');
                 }
             }else{
-                return 'Username and Password required';
+                throw new BadRequestException('Username and Password required');
             }
 
         }else{
-            return 'User is not register';
+            throw new NotFoundException('User is not registered');
         }
 
 
