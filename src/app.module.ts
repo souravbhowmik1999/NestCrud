@@ -12,9 +12,9 @@ import { ConfigModule } from "@nestjs/config";
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.HOST,
-      port: 3306,
+      port: 5432,
       username: process.env.USER_NAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
@@ -25,13 +25,12 @@ import { ConfigModule } from "@nestjs/config";
     AuthModule
   ]
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('posts')
-    // throw new Error('Method not implemented.');
-  }
-}
 
-// username: process.env.USERNAME,
-// password: process.env.PASSWORD,
-// database: process.env.DATABASE,
+export class AppModule {}
+
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer.apply(AuthMiddleware).forRoutes('user/*')
+//   }
+// }
+

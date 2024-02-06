@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from "./auth.service";
 import { AuthGuard } from '@nestjs/passport';
+import { LoginDto } from "./dto/login.dto";
 
 @Controller('auth')
 export class AuthController {
@@ -12,11 +13,11 @@ export class AuthController {
     // login(@Body() loginDto: any){
     //     return this.authService.validateUser(loginDto.email, loginDto.password)
     // }
-    login(@Request() req:any){
+    login(@Body() loginDto: LoginDto){
         // return req.user;
         // console.log(req.body.email);
         // return "hello world!";
         
-        return this.authService.login(req.body.email, req.body.password)
+        return this.authService.login(loginDto)
     }
 }
